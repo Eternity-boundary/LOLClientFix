@@ -7,7 +7,7 @@
 #include <openssl/buffer.h>
 #include <iostream>
 #include <regex>
-#define RELEASE
+#define DEBUG
 LeagueClientAPI::LeagueClientAPI(int Port, const std::string& Token) {
     BaseAddress = "https://127.0.0.1:" + std::to_string(Port);
     std::string auth = "riot:" + Token;
