@@ -141,7 +141,7 @@ public:
     }
 
     static string GetVersion() {
-        return "1.0.0"; 
+        return "1.0.0"; // 您可以根据需要调整版本号
     }
 
     static int GetUserChoice() {
@@ -163,9 +163,9 @@ public:
     static void Plan2() {
         int CurrentTriggerCount = 0;
 
-        cout << "> 程序将持续在背景执行" << endl;
+        cout << "> 已进入自动检测模式，您现在可以放心的去玩游戏了" << endl;
         cout << "> 当客户端尺寸出现异常时，程序将会自动修复" << endl;
-        cout << "> 使用 [Ctrl] + [C]终止程序执行" << endl;
+        cout << "> 按下 [Ctrl] + [C] 或 直接关闭本窗口 即可关闭检测并结束本程序" << endl;
         cout << "> ------" << endl;
 
         while (true) {
