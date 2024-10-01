@@ -7,7 +7,7 @@
 #include <openssl/buffer.h>
 #include <iostream>
 #include <regex>
-#define RELEASE
+#define DEBUG//定义DEBUG打开调试输出
 LeagueClientAPI::LeagueClientAPI(int Port, const std::string& Token) {
     BaseAddress = "https://127.0.0.1:" + std::to_string(Port);
     std::string auth = "riot:" + Token;
@@ -16,6 +16,10 @@ LeagueClientAPI::LeagueClientAPI(int Port, const std::string& Token) {
     // 调试输出
     std::cout << "AuthorizationHeader: " << AuthorizationHeader << std::endl; 
 #endif // DEBUG
+#ifdef RELEASE
+    std::cout << "如果程序出现问题请在LeagueClientAPI.cpp中定义DEBUG并重新编译以打开调试输出" << endl;
+#endif // RELEASE
+
 }
 
 
@@ -182,10 +186,10 @@ LeagueClientAPI::CommandLineArgs LeagueClientAPI::CommandLineParser(const std::s
     if (tokenFound && portFound) {
         std::string token = tokenMatch[1].str();
         std::string portStr = portMatch[1].str();
-
+#ifdef DEBUG
         // 调试输出
         std::cout << "提取的 Token（原始）: [" << token << "]" << std::endl;
-
+#endif // DEBUG
         // 移除开头的引号（如果有）
         if (!token.empty() && token.front() == '"') {
             token.erase(0, 1);
@@ -194,10 +198,10 @@ LeagueClientAPI::CommandLineArgs LeagueClientAPI::CommandLineParser(const std::s
         if (!token.empty() && token.back() == '"') {
             token.pop_back();
         }
-
+#ifdef DEBUG
         // 调试输出
         std::cout << "提取的 Token（处理后）: [" << token << "]" << std::endl;
-
+#endif // DEBUG
         // 对端口进行同样的处理
         if (!portStr.empty() && portStr.front() == '"') {
             portStr.erase(0, 1);

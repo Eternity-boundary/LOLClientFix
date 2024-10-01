@@ -8,6 +8,7 @@
 #include "ProcessControl.h"
 #include "LeagueClientAPI.h"
 #include "FixLeagueClientWindowError.h"
+#pragma warning(disable:6031)//抑制警告6031，目前不需要返回值
 #include <sstream>
 
 
@@ -24,7 +25,7 @@ public:
             return nullptr;
         }
 
-        // Return a new instance of LeagueClientAPI
+        // 实例化LeagueClientAPI并返回
         return new LeagueClientAPI(LeagueClientUxArgs.Port, LeagueClientUxArgs.Token);
     }
 
@@ -32,13 +33,13 @@ public:
         HWND LeagueClientWindowHWnd = FindWindowA("RCLIENT", "League of Legends");
         HWND LeagueClientWindowCefHWnd = FindWindowExA(LeagueClientWindowHWnd, NULL, "CefBrowserWindow", NULL);
 
-        // Return a pair of the two window handles
+        // 返回两个窗口句柄
         return make_pair(LeagueClientWindowHWnd, LeagueClientWindowCefHWnd);
     }
 
     static bool needResize(RECT rect) {
         double aspectRatio = static_cast<double>(rect.bottom - rect.top) / (rect.right - rect.left);
-        return abs(aspectRatio - 0.5625) > 0.01; // Allow small margin
+        return abs(aspectRatio - 0.5625) > 0.01; 
     }
 
     static int FixLeagueClientWindow(bool forced = false) {
@@ -47,7 +48,7 @@ public:
         RECT LeagueClientWindowCefRect = {};
 
         if (LeagueClientWindow.first == NULL || LeagueClientWindow.second == NULL) {
-            return -1; // Failed to get leagueclient window handle
+            return -1; //获取窗口句柄失败
         }
 
         if (IsMinimized(LeagueClientWindow.first)) {
@@ -64,7 +65,7 @@ public:
         LeagueClientAPI* LeagueClientAPIClient = GetLCU();
 
         if (LeagueClientAPIClient == nullptr) {
-            return -2; // Failed to get leagueclient api instance
+            return -2; // leagueclient api实例化失败
         }
 
         double LeagueClientZoom = LeagueClientAPIClient->GetClientZoom();
@@ -75,7 +76,7 @@ public:
 
         if (LeagueClientZoom == -1) {
             delete LeagueClientAPIClient;
-            return -3; // Failed to get leagueclient zoom
+            return -3; // 无法获取窗口大小
         }
 
         int TargetLeagueClientWindowWidth = static_cast<int>(1280 * LeagueClientZoom);
@@ -115,7 +116,7 @@ public:
         else {
             Run(false);
             cout << "> 按任意键退出..." << endl;
-            _getch();
+            _getch();//已抑制警告：此处不需要返回值
         }
     }
 
@@ -136,12 +137,12 @@ public:
         cout << "> [ 英雄联盟客户端修复 ]" << endl;
         cout << "原项目地址：https://github.com/LeagueTavern/fix-lcu-window" << endl;
         cout << "此项目由@Eternity-boundary重构" << endl;
-        cout << "> 修复客户端窗口 版本: -- " << GetVersion() << endl;
+        cout << "> 修复客户端窗口 版本 -- " << GetVersion() << endl;
         cout << "------" << endl;
     }
 
     static string GetVersion() {
-        return "1.0.0"; // 您可以根据需要调整版本号
+        return "1.0.0"; //可以根据需要调整版本号
     }
 
     static int GetUserChoice() {
@@ -149,7 +150,7 @@ public:
         getline(cin, UserOriginalInput);
         int UserInput = 0;
         if (UserOriginalInput.empty() || !(istringstream(UserOriginalInput) >> UserInput)) {
-            UserInput = 1; // Default to 1
+            UserInput = 1; 
         }
         return UserInput;
     }
@@ -163,9 +164,9 @@ public:
     static void Plan2() {
         int CurrentTriggerCount = 0;
 
-        cout << "> 已进入自动检测模式，您现在可以放心的去玩游戏了" << endl;
+        cout << "> 程序将在背景执行" << endl;
         cout << "> 当客户端尺寸出现异常时，程序将会自动修复" << endl;
-        cout << "> 按下 [Ctrl] + [C] 或 直接关闭本窗口 即可关闭检测并结束本程序" << endl;
+        cout << "> 按下 [Ctrl] + [C]即可结束本程序" << endl;
         cout << "> ------" << endl;
 
         while (true) {
@@ -214,21 +215,21 @@ public:
         }
 
         switch (UserChoice) {
-        case 0: // Exit
+        case 0: // 退出
             return;
         case 1: // Fix League Client Window
             cout << "> " << Plan1() << endl;
             break;
-        case 2: // Fix League Client Window (Auto)
+        case 2: // 自动修复窗口
             Plan2();
             break;
-        case 3: // Skip Post Game
+        case 3: // 跳过结算
             cout << "> " << Plan3() << endl;
             break;
-        case 4: // Restart Client
+        case 4: // 重启客户端
             cout << "> " << Plan4() << endl;
             break;
-        default: // Unknown Choice
+        default: // 未知选择
             cout << "> 未知的功能序号" << endl;
             break;
         }
